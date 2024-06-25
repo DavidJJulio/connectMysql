@@ -1,24 +1,6 @@
 import { 
-    getAllProductsDescription,
-    getEmployeesByOffice,
-    getOrdersbyStatus,
-    getAllOrderdetailsByCustomers,
-    getCreditLimitOverCertainQuantity,
-    getProductsWithDescriptions,
-    getDetailsOfEmployeeByBoss,
-    getOrdersByClientsFromFrance,
-    getTotalPaymentsByClients,
-    getOrderDetailsAndProductsByClientCode,
-    getAverageCreditLimitOfAllClients,
-    getTotalStock,
-    getAverageBuyPrice,
-    getOfficesQuantityByCountry,
-    getTotalPayments,
-    getTotalEmployees,
-    getAverageProductsInOrders,
-    getTotalOfAllProducts,
-    getAverageMSRP,
-    getTotalEmployeesByJobTitle,
-} from "./consultations.js";
+    getAllOrders,
+    getBiggestPrice
+} from "./module/order.js";
 
-console.log(await getTotalEmployeesByJobTitle())
+console.log(await getBiggestPrice())
