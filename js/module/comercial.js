@@ -13,3 +13,10 @@ export const getBiggestComision = async() =>{
     let [result]=await connection.query('select comision from comercial order by comision desc limit 1;');
     return result;
 }
+
+//10. Devuelve un listado con los nombres de los comerciales que terminan por `el` o `o`. Tenga en cuenta que se deberán eliminar los nombres repetidos.
+
+export const getComercialEndsWithEl = async() =>{
+    let [result]=await connection.query("SELECT DISTINCT nombre FROM comercial WHERE LOWER(RIGHT(nombre, 2)) = 'el' OR LOWER(RIGHT(nombre, 1)) = 'o';");
+    return result;
+}

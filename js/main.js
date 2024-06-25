@@ -3,4 +3,8 @@ import {
     getBiggestPrice
 } from "./module/pedido.js";
 
-console.log(await getBiggestPrice())
+import { 
+    getIdBy2ndLastnameNotNull,
+} from "./module/cliente.js";
+
+console.log(await getIdBy2ndLastnameNotNull())
