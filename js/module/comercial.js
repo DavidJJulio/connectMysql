@@ -57,3 +57,12 @@ export const getComercialWithoutRequests = async() =>{
     `);
     return result;
 }
+
+//2. Devuelve un listado de los comerciales que no han realizado ningún pedido. (Utilizando `IN` o `NOT IN`).
+
+export const getComercialByMethod = async() =>{
+    let [result]=await connection.query(`
+    select * from comercial where comercial.id not in (select id_comercial from pedido);
+    `);
+    return result;
+}

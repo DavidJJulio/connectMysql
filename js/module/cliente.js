@@ -166,3 +166,12 @@ export const getCLientByNoRequests = async() =>{
     `);
     return result;
 }
+
+//1. Devuelve un listado de los clientes que no han realizado ningún pedido. (Utilizando `IN` o `NOT IN`).
+
+export const getByMethod = async() =>{
+    let [result]=await connection.query(`
+    select * from cliente where cliente.id not in (select id_cliente from pedido);
+    `);
+    return result;
+}
