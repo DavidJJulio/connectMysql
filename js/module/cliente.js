@@ -69,3 +69,32 @@ export const getClientsByComercial = async() =>{
     select distinct c.nombre from cliente c inner join pedido p on p.id_cliente = c.id where p.id_comercial = (select id from comercial where concat(nombre, ' ', apellido1, ' ', apellido2) = 'Daniel Sáez Vega');`);
     return result;
 }
+
+//1. Devuelve un listado con **todos los clientes** junto con los datos de los pedidos que han realizado. Este listado también debe incluir los clientes que no han realizado ningún pedido. 
+//El listado debe estar ordenado alfabéticamente por el primer apellido, segundo apellido y nombre de los clientes.
+
+export const getAllClients = async() =>{
+    let [result]=await connection.query(`
+    select distinct c.id, c.nombre, c.apellido1, c.apellido2, p.* from cliente c left join pedido p on c.id = p.id_cliente;
+    `);
+    return result;
+}
+
+//3. Devuelve un listado que solamente muestre los clientes que no han realizado ningún pedido.
+
+export const getClientsWithoutPayments = async() =>{
+    let [result]=await connection.query(`
+    select c.* from cliente c left join pedido p on c.id = p.id_cliente where p.id_cliente is null;
+    `);
+    return result;
+}
+
+//5. Devuelve un listado con los clientes que no han realizado ningún pedido y de los comerciales que no han participado en ningún pedido. Ordene el listado 
+//alfabéticamente por los apellidos y el nombre. En en listado deberá diferenciar de algún modo los clientes y los comerciales.
+
+export const getClientsWithoutRequests = async() =>{
+    let [result]=await connection.query(`
+    # German
+    `);
+    return result;
+}
