@@ -1,6 +1,6 @@
 import { 
     getAllOrders,
     getBiggestPrice
-} from "./module/order.js";
+} from "./module/pedido.js";
 
 console.log(await getBiggestPrice())
