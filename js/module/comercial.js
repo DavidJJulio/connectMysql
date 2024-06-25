@@ -20,3 +20,18 @@ export const getComercialEndsWithEl = async() =>{
     let [result]=await connection.query("SELECT DISTINCT nombre FROM comercial WHERE LOWER(RIGHT(nombre, 2)) = 'el' OR LOWER(RIGHT(nombre, 1)) = 'o';");
     return result;
 }
+
+//3. Devuelve un listado que muestre todos los pedidos en los que ha participado un comercial. El resultado debe mostrar todos los datos de los pedidos y de los comerciales. 
+//El listado debe mostrar los datos de los comerciales ordenados alfabéticamente.
+
+export const getRequestsFromComercial = async() =>{
+    let [result]=await connection.query(`SELECT p.id, p.total, p.fecha, p.id_cliente, p.id_comercial, cl.nombre, cl.apellido1, cl.apellido2, cl.comision FROM pedido AS p INNER JOIN comercial AS cl ON cl.id = p.id_comercial ORDER BY nombre;`);
+    return result;
+}
+
+//6. Devuelve el nombre y los apellidos de todos los comerciales que ha participado en algún pedido realizado por `María Santana Moreno`.
+
+export const getComercialByClient = async() =>{
+    let [result]=await connection.query(`SELECT p.id, p.total, p.fecha, p.id_cliente, p.id_comercial, cl.nombre, cl.apellido1, cl.apellido2, cl.comision FROM pedido AS p INNER JOIN comercial AS cl ON cl.id = p.id_comercial ORDER BY nombre;`);
+    return result;
+}

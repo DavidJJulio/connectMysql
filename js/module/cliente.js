@@ -23,3 +23,49 @@ export const getClientsNotStartsWithA = async() =>{
     return result;
 }
 
+//1. Devuelve un listado con el identificador, nombre y los apellidos de todos los clientes que han realizado algún pedido. 
+//El listado debe estar ordenado alfabéticamente y se deben eliminar los elementos repetidos.
+export const getClientsHaveDoneRequests = async() =>{
+    let [result]=await connection.query("select distinct c.id, c.nombre, c.apellido1, c.apellido2 from cliente c inner join pedido p on p.id_cliente = c.id");
+    return result;
+}
+
+//2. Devuelve un listado que muestre todos los pedidos que ha realizado cada cliente. El resultado debe mostrar todos los datos de los pedidos y del cliente. 
+//El listado debe mostrar los datos de los clientes ordenados alfabéticamente.
+
+export const getRequestsFromClients = async() =>{
+    let [result]=await connection.query(`
+    select  c.id, c.nombre, c.apellido1, c.apellido2, c.ciudad, c.categoria, p.id, p.total, p.fecha, p.id_cliente, p.id_comercial 
+    from cliente c
+    inner join pedido p on c.id = p.id_cliente
+    order by c.nombre asc, c.apellido1 asc;`);
+    return result;
+}
+
+//4. Devuelve un listado que muestre todos los clientes, con todos los pedidos que han realizado y con los datos de los comerciales asociados a cada pedido.
+
+export const getAllFromClients = async() =>{
+    let [result]=await connection.query(`SELECT c.id AS cliente_id, p.id AS pedido_id, co.id AS comercial_id, co.nombre, co.apellido1 FROM cliente AS c INNER JOIN pedido AS p ON c.id = p.id_cliente INNER JOIN comercial AS co ON p.id_comercial = co.id ORDER BY c.id;`);
+    return result;
+}
+
+//5. Devuelve un listado de todos los clientes que realizaron un pedido durante el año `2017`, cuya cantidad esté entre `300` € y `1000` €.
+
+export const getClientsByYearAndPayment = async() =>{
+    let [result]=await connection.query(`
+    SELECT co.apellido1, co.nombre, co.apellido2
+    FROM comercial co
+    INNER JOIN pedido p ON p.id_comercial = co.id
+    INNER JOIN cliente cl ON cl.id = p.id_cliente
+    WHERE
+    concat(cl.nombre, ' ',cl.apellido1, ' ',cl.apellido2) = 'Maria Santana Moreno';`);
+    return result;
+}
+
+//7. Devuelve el nombre de todos los clientes que han realizado algún pedido con el comercial `Daniel Sáez Vega`.
+
+export const getClientsByComercial = async() =>{
+    let [result]=await connection.query(`
+    select distinct c.nombre from cliente c inner join pedido p on p.id_cliente = c.id where p.id_comercial = (select id from comercial where concat(nombre, ' ', apellido1, ' ', apellido2) = 'Daniel Sáez Vega');`);
+    return result;
+}
