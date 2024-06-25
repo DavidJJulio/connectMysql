@@ -98,3 +98,71 @@ export const getClientsWithoutRequests = async() =>{
     `);
     return result;
 }
+
+//4. Calcula el número total de clientes que aparecen en la tabla `cliente`.
+
+export const getCountClients = async() =>{
+    let [result]=await connection.query(`
+    select count(*) from cliente;
+    `);
+    return result;
+}
+
+//7. Calcula cuál es el valor máximo de categoría para cada una de las ciudades que aparece en la tabla `cliente`.
+
+export const getMaxValue = async() =>{
+    let [result]=await connection.query(`select distinct(ciudad), max(categoria) from cliente group by ciudad;`);
+    return result;
+}
+
+//8. Calcula cuál es el máximo valor de los pedidos realizados durante el mismo día para cada uno de los clientes. 
+//Es decir, el mismo cliente puede haber realizado varios pedidos de diferentes cantidades el mismo día. 
+//Se pide que se calcule cuál es el pedido de máximo valor para cada uno de los días en los que un 
+//cliente ha realizado un pedido. Muestra el identificador del cliente, nombre, apellidos, la fecha y el valor de la cantidad.
+
+export const getMaxRequestsByClient = async() =>{
+    let [result]=await connection.query(`
+    SELECT t1.id, t1.nombre, t1.apellido1, MAX(t2.total),     t2.fecha 
+    FROM cliente t1, pedido t2 
+    WHERE t2.id_cliente = t1.id GROUP BY t2.fecha, t1.id ORDER BY t2.fecha;`);
+    return result;
+}
+
+//11. Devuelve un listado con el identificador de cliente, nombre y apellidos y el número total de pedidos que ha realizado cada uno de clientes. 
+//Tenga en cuenta que pueden existir clientes que no han realizado ningún pedido. 
+//Estos clientes también deben aparecer en el listado indicando que el número de pedidos realizados es `0`.
+
+export const getIdByNumberOfRequests = async() =>{
+    let [result]=await connection.query(`
+    SELECT cliente.id, cliente.apellido1, cliente.apellido2, COUNT(pedido.id)
+    FROM cliente
+    LEFT JOIN pedido ON cliente.id=pedido.id_cliente
+    GROUP BY cliente.id;
+    `);
+    return result;
+}
+
+
+//12. Devuelve un listado con el identificador de cliente, nombre y apellidos 
+//y el número total de pedidos que ha realizado cada uno de clientes **durante el año 2017**.
+
+export const getClientByYear = async() =>{
+    let [result]=await connection.query(`
+    select cliente.id, cliente.nombre, cliente.apellido1, cliente.apellido2, count(pedido.id) as cantidad2017 from cliente inner join pedido on pedido.id_cliente = cliente.id where year(pedido.fecha) = 2017 group by cliente.id;
+    `);
+    return result;
+}
+
+//13. Devuelve un listado que muestre el identificador de cliente, nombre, primer apellido y el valor de la máxima cantidad del pedido realizado por cada uno de los clientes. 
+//El resultado debe mostrar aquellos clientes que no han realizado ningún pedido indicando que la máxima cantidad de sus pedidos realizados es `0`. Puede hacer uso de la función [`IFNULL`](https://dev.mysql.com/doc/refman/8.0/en/control-flow-functions.html#function_ifnull).
+
+export const getCLientByNoRequests = async() =>{
+    let [result]=await connection.query(`
+    SELECT C.id, C.nombre, C.apellido1, IFNULL(max(P.total), 0) AS 'Cantidad maxima'
+    FROM cliente AS C
+    LEFT JOIN pedido as P
+    ON C.id = P.id_cliente
+    GROUP BY C.id;
+    `);
+    return result;
+}
